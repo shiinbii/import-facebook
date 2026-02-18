@@ -321,7 +321,17 @@ Duplikat username/userid dihitung 1."></textarea>
     let parsedData = [];
 
     // Semua kata kunci yang harus diabaikan di URL
-    const IGNORE_PATTERN = /friends[_\-]?mutual|[_/?&]friends([_\-/]|$)|[_/?&=]mutual|\/friends$/i;
+    function isMutualUrl(url) {
+      const u = url.toLowerCase();
+      return u.includes('friends_mutual') ||
+             u.includes('friends-mutual') ||
+             u.includes('/friends/') ||
+             u.includes('/friends?') ||
+             u.includes('/mutual') ||
+             u.endsWith('/friends') ||
+             u.includes('sk=friends_mutual') ||
+             u.includes('sk=friends');
+    }
 
     function parseLinks() {
       const raw   = document.getElementById('inputArea').value;
@@ -353,7 +363,7 @@ Duplikat username/userid dihitung 1."></textarea>
         totalInput++;
 
         // Abaikan semua URL yang mengandung friends / mutual dalam bentuk apapun
-        if (IGNORE_PATTERN.test(url)) {
+        if (isMutualUrl(url)) {
           skipped++;
           return;
         }
